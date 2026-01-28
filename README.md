@@ -82,8 +82,8 @@ Values are in kilometers from Earth's center (~6,371 km radius).
 | `keeptrack_protocol` | https | Protocol (http/https) |
 | `default_object_id` | 25544 | NORAD Catalog ID (25544 = ISS) |
 | `omm_poll_period` | 1800 | OMM polling interval in seconds (0 to disable) |
-| `lla_poll_period` | 10 | LLA polling interval in seconds (0 to disable) |
-| `ecf_poll_period` | 10 | ECF polling interval in seconds (0 to disable) |
+| `lla_poll_period` | 15 | LLA polling interval in seconds (0 to disable) |
+| `ecf_poll_period` | 15 | ECF polling interval in seconds (0 to disable) |
 
 ## Screens
 
