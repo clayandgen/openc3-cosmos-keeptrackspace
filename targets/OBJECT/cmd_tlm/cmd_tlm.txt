@@ -1,0 +1,131 @@
+COMMAND <%= target_name %> GET_LLA BIG_ENDIAN "Get current satellite position (Lat/Lon/Alt) from KeepTrack Space API"
+  ACCESSOR openc3/accessors/http_accessor.py
+  PARAMETER HTTP_PATH 0 0 DERIVED nil nil "/v2/sat/<%= default_object_id %>/lla/2021-01-01T00:00:00Z"
+    WRITE_CONVERSION lla_path_conversion.py <%= default_object_id %>
+  PARAMETER HTTP_METHOD 0 0 DERIVED nil nil "GET"
+  PARAMETER HTTP_PACKET 0 0 DERIVED nil nil "LLA_RESPONSE"
+  PARAMETER HTTP_ERROR_PACKET 0 0 DERIVED nil nil "ERROR_RESPONSE"
+
+TELEMETRY <%= target_name %> LLA_RESPONSE BIG_ENDIAN "Satellite position response from KeepTrack Space API"
+  ACCESSOR openc3/accessors/http_accessor.py openc3/accessors/json_accessor.py
+  TEMPLATE '{"lat":0.0,"lon":0.0,"alt":0.0}'
+  ITEM HTTP_STATUS 0 0 DERIVED "HTTP response status code"
+  APPEND_ITEM LAT 64 FLOAT "Latitude"
+    KEY $.lat
+    UNITS DEGREES °
+    FORMAT_STRING "%.6f"
+  APPEND_ITEM LON 64 FLOAT "Longitude"
+    KEY $.lon
+    UNITS DEGREES °
+    FORMAT_STRING "%.6f"
+  APPEND_ITEM ALT 64 FLOAT "Altitude"
+    KEY $.alt
+    UNITS KILOMETERS KM
+    FORMAT_STRING "%.3f"
+  ITEM ALT_M 0 0 DERIVED "Altitude in meters"
+    GENERIC_READ_CONVERSION_START
+      packet.read('ALT') * 1000
+    GENERIC_READ_CONVERSION_END
+    UNITS METERS M
+    FORMAT_STRING "%.0f"
+
+COMMAND <%= target_name %> GET_ECF BIG_ENDIAN "Get current satellite position in ECF coordinates from KeepTrack Space API"
+  ACCESSOR openc3/accessors/http_accessor.py
+  PARAMETER HTTP_PATH 0 0 DERIVED nil nil "/v2/sat/<%= default_object_id %>/ecf/2021-01-01T00:00:00Z"
+    WRITE_CONVERSION ecf_path_conversion.py <%= default_object_id %>
+  PARAMETER HTTP_METHOD 0 0 DERIVED nil nil "GET"
+  PARAMETER HTTP_PACKET 0 0 DERIVED nil nil "ECF_RESPONSE"
+  PARAMETER HTTP_ERROR_PACKET 0 0 DERIVED nil nil "ERROR_RESPONSE"
+
+TELEMETRY <%= target_name %> ECF_RESPONSE BIG_ENDIAN "Satellite ECF position response from KeepTrack Space API"
+  ACCESSOR openc3/accessors/http_accessor.py openc3/accessors/json_accessor.py
+  TEMPLATE '{"x":0.0,"y":0.0,"z":0.0}'
+  ITEM HTTP_STATUS 0 0 DERIVED "HTTP response status code"
+  APPEND_ITEM POS_X 64 FLOAT "ECF X Position"
+    KEY $.x
+    UNITS KILOMETERS KM
+    FORMAT_STRING "%.3f"
+  APPEND_ITEM POS_Y 64 FLOAT "ECF Y Position"
+    KEY $.y
+    UNITS KILOMETERS KM
+    FORMAT_STRING "%.3f"
+  APPEND_ITEM POS_Z 64 FLOAT "ECF Z Position"
+    KEY $.z
+    UNITS KILOMETERS KM
+    FORMAT_STRING "%.3f"
+  ITEM POS_X_M 0 0 DERIVED "ECF X Position in meters"
+    GENERIC_READ_CONVERSION_START
+      packet.read('POS_X') * 1000
+    GENERIC_READ_CONVERSION_END
+    UNITS METERS M
+    FORMAT_STRING "%.0f"
+  ITEM POS_Y_M 0 0 DERIVED "ECF Y Position in meters"
+    GENERIC_READ_CONVERSION_START
+      packet.read('POS_Y') * 1000
+    GENERIC_READ_CONVERSION_END
+    UNITS METERS M
+    FORMAT_STRING "%.0f"
+  ITEM POS_Z_M 0 0 DERIVED "ECF Z Position in meters"
+    GENERIC_READ_CONVERSION_START
+      packet.read('POS_Z') * 1000
+    GENERIC_READ_CONVERSION_END
+    UNITS METERS M
+    FORMAT_STRING "%.0f"
+
+COMMAND <%= target_name %> GET_OMM BIG_ENDIAN "Get OMM (Orbit Mean-elements Message) data from KeepTrack Space API"
+  ACCESSOR openc3/accessors/http_accessor.py
+  PARAMETER HTTP_PATH 0 0 DERIVED nil nil "/v2/sat/<%= default_object_id %>/omm"
+  PARAMETER HTTP_METHOD 0 0 DERIVED nil nil "GET"
+  PARAMETER HTTP_PACKET 0 0 DERIVED nil nil "OMM_RESPONSE"
+  PARAMETER HTTP_ERROR_PACKET 0 0 DERIVED nil nil "ERROR_RESPONSE"
+
+TELEMETRY <%= target_name %> OMM_RESPONSE BIG_ENDIAN "OMM response from KeepTrack Space API"
+  ACCESSOR openc3/accessors/http_accessor.py openc3/accessors/json_accessor.py
+  TEMPLATE '{"OBJECT_NAME":"","OBJECT_ID":"","OBJECT_NUMBER":"","EPOCH":"","MEAN_MOTION":"","ECCENTRICITY":"","INCLINATION":"","RA_OF_ASC_NODE":"","ARG_OF_PERICENTER":"","MEAN_ANOMALY":"","EPHEMERIS_TYPE":"","CLASSIFICATION_TYPE":"","NORAD_CAT_ID":"","ELEMENT_SET_NO":"","REV_AT_EPOCH":"","BSTAR":"","MEAN_MOTION_DOT":"","MEAN_MOTION_DDOT":""}'
+  ITEM HTTP_STATUS 0 0 DERIVED "HTTP response status code"
+  # Identification
+  APPEND_ITEM OBJECT_NAME 256 STRING "Satellite name"
+    KEY $.OBJECT_NAME
+  APPEND_ITEM OBJECT_ID 72 STRING "International designator"
+    KEY $.OBJECT_ID
+  APPEND_ITEM NORAD_CAT_ID 40 STRING "NORAD Catalog ID"
+    KEY $.NORAD_CAT_ID
+  APPEND_ITEM CLASSIFICATION_TYPE 8 STRING "Classification (U=unclassified)"
+    KEY $.CLASSIFICATION_TYPE
+  # Epoch
+  APPEND_ITEM EPOCH 192 STRING "Epoch timestamp (ISO 8601)"
+    KEY $.EPOCH
+  # Orbital elements
+  APPEND_ITEM INCLINATION 64 STRING "Inclination (degrees)"
+    KEY $.INCLINATION
+  APPEND_ITEM RA_OF_ASC_NODE 64 STRING "Right Ascension of Ascending Node (degrees)"
+    KEY $.RA_OF_ASC_NODE
+  APPEND_ITEM ECCENTRICITY 64 STRING "Eccentricity"
+    KEY $.ECCENTRICITY
+  APPEND_ITEM ARG_OF_PERICENTER 64 STRING "Argument of Pericenter (degrees)"
+    KEY $.ARG_OF_PERICENTER
+  APPEND_ITEM MEAN_ANOMALY 64 STRING "Mean Anomaly (degrees)"
+    KEY $.MEAN_ANOMALY
+  APPEND_ITEM MEAN_MOTION 64 STRING "Mean Motion (revolutions/day)"
+    KEY $.MEAN_MOTION
+  # Derivatives and drag
+  APPEND_ITEM MEAN_MOTION_DOT 64 STRING "First derivative of mean motion"
+    KEY $.MEAN_MOTION_DOT
+  APPEND_ITEM MEAN_MOTION_DDOT 64 STRING "Second derivative of mean motion"
+    KEY $.MEAN_MOTION_DDOT
+  APPEND_ITEM BSTAR 64 STRING "BSTAR drag term"
+    KEY $.BSTAR
+  # Element set info
+  APPEND_ITEM EPHEMERIS_TYPE 8 STRING "Ephemeris type"
+    KEY $.EPHEMERIS_TYPE
+  APPEND_ITEM ELEMENT_SET_NO 32 STRING "Element set number"
+    KEY $.ELEMENT_SET_NO
+  APPEND_ITEM REV_AT_EPOCH 48 STRING "Revolution number at epoch"
+    KEY $.REV_AT_EPOCH
+
+TELEMETRY <%= target_name %> ERROR_RESPONSE BIG_ENDIAN "Error response from KeepTrack Space API"
+  ACCESSOR openc3/accessors/http_accessor.py openc3/accessors/json_accessor.py
+  TEMPLATE '{"error":""}'
+  ITEM HTTP_STATUS 0 0 DERIVED "HTTP response status code"
+  APPEND_ITEM ERROR 512 STRING "Error message"
+    KEY $.error

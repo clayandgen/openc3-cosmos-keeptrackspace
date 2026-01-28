@@ -1,0 +1,5 @@
+SCREEN AUTO AUTO 1.0
+
+TITLE "<%= target_name %> KeepTrack Visualization"
+
+IFRAME http://localhost:5544/?sat=<%= default_object_id %> 1200 800

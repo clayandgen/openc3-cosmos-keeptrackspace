@@ -1,0 +1,62 @@
+SCREEN AUTO AUTO 1.0
+
+VERTICAL
+  TITLE "<%= target_name %> Satellite Tracking"
+
+  HORIZONTAL
+    VERTICALBOX "Satellite Info"
+      LABELVALUE <%= target_name %> OMM_RESPONSE OBJECT_NAME CONVERTED 24
+        SETTING TEXTCOLOR var(--color-data-visualization-1)
+      LABELVALUE <%= target_name %> OMM_RESPONSE NORAD_CAT_ID CONVERTED 12
+      LABELVALUE <%= target_name %> OMM_RESPONSE OBJECT_ID CONVERTED 12
+      LABELVALUE <%= target_name %> OMM_RESPONSE EPOCH CONVERTED 24
+    END
+
+    VERTICALBOX "LLA Position"
+      LABELVALUE <%= target_name %> LLA_RESPONSE LAT WITH_UNITS 16
+        SETTING TEXTCOLOR var(--color-data-visualization-2)
+      LABELVALUE <%= target_name %> LLA_RESPONSE LON WITH_UNITS 16
+        SETTING TEXTCOLOR var(--color-data-visualization-2)
+      LABELVALUE <%= target_name %> LLA_RESPONSE ALT WITH_UNITS 16
+        SETTING TEXTCOLOR var(--color-data-visualization-3)
+    END
+
+    VERTICALBOX "ECF Position"
+      LABELVALUE <%= target_name %> ECF_RESPONSE POS_X WITH_UNITS 16
+        SETTING TEXTCOLOR var(--color-data-visualization-4)
+      LABELVALUE <%= target_name %> ECF_RESPONSE POS_Y WITH_UNITS 16
+        SETTING TEXTCOLOR var(--color-data-visualization-4)
+      LABELVALUE <%= target_name %> ECF_RESPONSE POS_Z WITH_UNITS 16
+        SETTING TEXTCOLOR var(--color-data-visualization-4)
+    END
+  END
+
+  HORIZONTAL
+    VERTICALBOX "Position History"
+      LABELSPARKLINE <%= target_name %> LLA_RESPONSE LAT
+        SETTING SIZE 300 50
+        SETTING HISTORY 5m
+      LABELSPARKLINE <%= target_name %> LLA_RESPONSE LON
+        SETTING SIZE 300 50
+        SETTING HISTORY 5m
+      LABELSPARKLINE <%= target_name %> LLA_RESPONSE ALT
+        SETTING SIZE 300 50
+        SETTING HISTORY 5m
+    END
+
+    VERTICALBOX "Orbital Elements"
+      LABELVALUE <%= target_name %> OMM_RESPONSE INCLINATION CONVERTED 12
+      LABELVALUE <%= target_name %> OMM_RESPONSE RA_OF_ASC_NODE CONVERTED 12
+      LABELVALUE <%= target_name %> OMM_RESPONSE ECCENTRICITY CONVERTED 12
+      LABELVALUE <%= target_name %> OMM_RESPONSE ARG_OF_PERICENTER CONVERTED 12
+      LABELVALUE <%= target_name %> OMM_RESPONSE MEAN_ANOMALY CONVERTED 12
+      LABELVALUE <%= target_name %> OMM_RESPONSE MEAN_MOTION CONVERTED 14
+    END
+  END
+
+  HORIZONTALBOX "Commands"
+    BUTTON 'Refresh LLA' 'api.cmd("<%= target_name %> GET_LLA")'
+    BUTTON 'Refresh ECF' 'api.cmd("<%= target_name %> GET_ECF")'
+    BUTTON 'Refresh Orbit Data' 'api.cmd("<%= target_name %> GET_OMM")'
+  END
+END
