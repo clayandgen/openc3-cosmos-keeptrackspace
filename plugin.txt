@@ -6,8 +6,8 @@ VARIABLE keeptrack_port 443
 VARIABLE keeptrack_protocol https
 VARIABLE default_object_id 25544
 VARIABLE omm_poll_period 1800
-VARIABLE lla_poll_period 10
-VARIABLE ecf_poll_period 10
+VARIABLE lla_poll_period 15
+VARIABLE ecf_poll_period 15
 
 TARGET OBJECT <%= object_target_name %>
 INTERFACE <%= object_target_name %>_INT openc3/interfaces/http_client_interface.py <%= keeptrack_hostname %> <%= keeptrack_port %> <%= keeptrack_protocol %> 5.0 5.0

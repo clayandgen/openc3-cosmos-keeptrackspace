@@ -125,6 +125,10 @@ Find more at [CelesTrak](https://celestrak.org/NORAD/elements/).
 
 This plugin uses the [KeepTrack Space API v2](https://api.keeptrack.space/v2/docs).
 
+> **Important:** The KeepTrack API is free for non-commercial use only. For commercial use, please contact KeepTrack.
+
+> **Rate Limiting:** Setting polling periods below 10 seconds may cause rate limiting issues with the API, resulting in empty responses or errors. Keep `lla_poll_period` and `ecf_poll_period` at 10 seconds or higher.
+
 ## License
 
 This OpenC3 plugin is released under the MIT License. See [LICENSE.txt](LICENSE.txt)
