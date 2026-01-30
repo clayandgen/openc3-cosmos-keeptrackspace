@@ -23,9 +23,7 @@ TELEMETRY <%= target_name %> LLA_RESPONSE BIG_ENDIAN "Satellite position respons
     UNITS KILOMETERS KM
     FORMAT_STRING "%.3f"
   ITEM ALT_M 0 0 DERIVED "Altitude in meters"
-    GENERIC_READ_CONVERSION_START
-      packet.read('ALT') * 1000
-    GENERIC_READ_CONVERSION_END
+    READ_CONVERSION km_to_m_conversion.py ALT
     UNITS METERS M
     FORMAT_STRING "%.0f"
 
@@ -54,21 +52,15 @@ TELEMETRY <%= target_name %> ECF_RESPONSE BIG_ENDIAN "Satellite ECF position res
     UNITS KILOMETERS KM
     FORMAT_STRING "%.3f"
   ITEM POS_X_M 0 0 DERIVED "ECF X Position in meters"
-    GENERIC_READ_CONVERSION_START
-      packet.read('POS_X') * 1000
-    GENERIC_READ_CONVERSION_END
+    READ_CONVERSION km_to_m_conversion.py POS_X
     UNITS METERS M
     FORMAT_STRING "%.0f"
   ITEM POS_Y_M 0 0 DERIVED "ECF Y Position in meters"
-    GENERIC_READ_CONVERSION_START
-      packet.read('POS_Y') * 1000
-    GENERIC_READ_CONVERSION_END
+    READ_CONVERSION km_to_m_conversion.py POS_Y
     UNITS METERS M
     FORMAT_STRING "%.0f"
   ITEM POS_Z_M 0 0 DERIVED "ECF Z Position in meters"
-    GENERIC_READ_CONVERSION_START
-      packet.read('POS_Z') * 1000
-    GENERIC_READ_CONVERSION_END
+    READ_CONVERSION km_to_m_conversion.py POS_Z
     UNITS METERS M
     FORMAT_STRING "%.0f"
 
